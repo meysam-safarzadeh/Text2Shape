@@ -10,6 +10,9 @@ import spacy
 import language_tool_python
 import nrrd
 
+tool = language_tool_python.LanguageTool('en-US') # load the LanguageTool
+nlp = spacy.load('en_core_web_sm')
+
 def pad_texts(texts):
     max_len = 96
     padded_texts = []
@@ -21,15 +24,9 @@ def pad_texts(texts):
         padded_texts.append(' '.join(words))
     return padded_texts
 
+
 def preprocess_textlist(text_list):
-    tool = language_tool_python.LanguageTool('en-US') # load the LanguageTool
-    nlp = spacy.load('en_core_web_sm')
-    
-    # create a dictionary of unique tokens
-    # dictionary = {token: idx for idx, token in enumerate(nlp.vocab.strings)}
-    # text_list = pad_texts(text_list)
-    # sequences_idxs = np.empty((len(text_list), 96))
-    decoded_texts = list()
+    preprocessed_texts = list()
     
     for c, text in enumerate(text_list):
         # lowercase the text
@@ -49,9 +46,9 @@ def preprocess_textlist(text_list):
         tokens = [token.lemma_.lower() for token in doc]
         tokens = tokens[:96]
         decoded_text = text = ' '.join(tokens)
-        decoded_texts.append(decoded_text)
+        preprocessed_texts.append(decoded_text)
         
-    return decoded_texts
+    return preprocessed_texts
 
 
 

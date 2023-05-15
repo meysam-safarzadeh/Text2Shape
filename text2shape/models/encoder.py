@@ -30,15 +30,15 @@ class Text_Encoder(nn.Module):
 
 
     def forward(self, x):
-        # print(x.shape)
+        print(x.shape)
         x = self.conv_layers(x)
-        # print(x.shape)
+        print(x.shape)
         x, _ = self.gru(x.transpose(1, 2))
-        # print(x.shape)
+        print(x.shape)
         x = self.pooling_layer(x.transpose(1, 2)).squeeze()
-        # print(x.shape, 'here')
+        print(x.shape, 'here')
         x = self.fc(x)
-        # print(x.shape)
+        print(x.shape)
         
         regularizer_loss = 0
         for param in self.parameters():

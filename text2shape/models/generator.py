@@ -9,10 +9,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 
-class Text2ShapeGenerator1(nn.Module):
+class Text2ShapeGenerator(nn.Module):
 
     def __init__(self, is_training=False, name='t2s_generator_1'):
-        super(Text2ShapeGenerator1, self).__init__()
+        super(Text2ShapeGenerator, self).__init__()
         self.is_training = is_training
 
         # Conv1
@@ -34,8 +34,8 @@ class Text2ShapeGenerator1(nn.Module):
         # Conv5
         self.conv_transpose5 = nn.ConvTranspose3d(128, 4, kernel_size=3, stride=1, padding=1)
 
-    def forward(self, inputs_dict):
-        x = inputs_dict['text_encoding_with_noise']
+    def forward(self, inputs):
+        x = inputs
         # print('\t\tinput', x.shape)
 
         # Conv1
@@ -73,14 +73,14 @@ class Text2ShapeGenerator1(nn.Module):
 
 
 # Create an instance of the network
-net = Text2ShapeGenerator1()
+net = Text2ShapeGenerator()
 
 # Define a random input tensor with the appropriate shape
 input_shape = (2, 128)
 text_encoding_with_noise = torch.rand(input_shape)
 
 # Pass the input tensor through the network
-output_dict = net({'text_encoding_with_noise': text_encoding_with_noise})
+output_dict = net(text_encoding_with_noise)
 
 # Print the shape of the output tensor
 print('Sigmoid output shape:', output_dict['sigmoid_output'].shape)
