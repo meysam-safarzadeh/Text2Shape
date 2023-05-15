@@ -11,7 +11,7 @@ import torch
 
 class Text2ShapeGenerator1(nn.Module):
 
-    def __init__(self, is_training, name='t2s_generator_1'):
+    def __init__(self, is_training=False, name='t2s_generator_1'):
         super(Text2ShapeGenerator1, self).__init__()
         self.is_training = is_training
 
@@ -73,7 +73,7 @@ class Text2ShapeGenerator1(nn.Module):
 
 
 # Create an instance of the network
-net = Text2ShapeGenerator1(is_training=False)
+net = Text2ShapeGenerator1()
 
 # Define a random input tensor with the appropriate shape
 input_shape = (2, 256)
