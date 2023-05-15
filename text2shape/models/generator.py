@@ -16,7 +16,7 @@ class Text2ShapeGenerator1(nn.Module):
         self.is_training = is_training
 
         # Conv1
-        self.fc1 = nn.Linear(128 + 128, 512 * 4 * 4 * 4)
+        self.fc1 = nn.Linear(128, 512 * 4 * 4 * 4)
         self.fc1_bn = nn.BatchNorm1d(512 * 4 * 4 * 4)
 
         # Conv2
@@ -76,7 +76,7 @@ class Text2ShapeGenerator1(nn.Module):
 net = Text2ShapeGenerator1()
 
 # Define a random input tensor with the appropriate shape
-input_shape = (2, 256)
+input_shape = (2, 128)
 text_encoding_with_noise = torch.rand(input_shape)
 
 # Pass the input tensor through the network

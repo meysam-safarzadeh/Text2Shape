@@ -82,9 +82,10 @@ def embed_textlist(text_list):
     with torch.no_grad():
         embeddings = model(input_ids)[0][:, :256]
     
-    print(embeddings.shape)  # Output: torch.Size([2, 128, 256])
+    print(embeddings.shape)  # Output: torch.Size([2, 64, 768])
+    return embeddings
 
 
 
-
+embeded_textlist = embed_textlist(preprocessed_text_list)
 
