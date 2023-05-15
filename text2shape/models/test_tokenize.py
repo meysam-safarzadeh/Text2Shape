@@ -8,7 +8,7 @@ Created on Sat May 13 18:26:14 2023
 import numpy as np
 import spacy
 import language_tool_python
-
+import nrrd
 
 def pad_texts(texts):
     max_len = 96
@@ -21,7 +21,7 @@ def pad_texts(texts):
         padded_texts.append(' '.join(words))
     return padded_texts
 
-def preprocessing_textlist(text_list):
+def preprocess_textlist(text_list):
     tool = language_tool_python.LanguageTool('en-US') # load the LanguageTool
     nlp = spacy.load('en_core_web_sm')
     
@@ -55,8 +55,8 @@ def preprocessing_textlist(text_list):
 
 
 
-text_list = ["The quick brown fox jumped over the lazy dog.", "hello, a good chair!"]
-preprocessed_text_list = preprocessing_textlist(text_list)
+# text_list = ["The quick brown fox jumped over the lazy dog.", "hello, a good chair!"]
+# preprocessed_text_list = preprocess_textlist(text_list)
 
 
 import torch
@@ -85,7 +85,24 @@ def embed_textlist(text_list):
     print(embeddings.shape)  # Output: torch.Size([2, 64, 768])
     return embeddings
 
+def read_gt(nrrd_files_list):
+    """
+    read a list of nrrd file paths and get them into one tensor!
+    """
+    data_list = np.empty((len(nrrd_files_list), 4, 32, 32, 32))
+    # Loop over each file and load the data
+    for c, nrrd_file in enumerate(nrrd_files_list):
+        # Load the NRRD file into a numpy array
+        # breakpoint()
+        data, _ = nrrd.read(nrrd_file)
+    
+        # Append the data to the list
+        data_list[c] = (data)
+
+    # Convert the list to a PyTorch tensor
+    data_tensor = torch.tensor(data_list)
+    return data_tensor
 
 
-embeded_textlist = embed_textlist(preprocessed_text_list)
+# embeded_textlist = embed_textlist(preprocessed_text_list)
 
