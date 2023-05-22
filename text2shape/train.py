@@ -16,6 +16,7 @@ from torch.utils.data import random_split
 import torch.nn as nn
 import torch.optim as optim
 import shutil
+import numpy as np
 
 def save_checkpoint(state, is_best, checkpoint_folder='checkpoints/', filename='checkpoint.pth.tar'):
     checkpoint_file = os.path.join(checkpoint_folder, 'checkpoint_{}.pth.tar'.format(state['epoch']))
@@ -168,32 +169,14 @@ def main():
     return model, train_loss_hist, val_loss_hist
 
 
-model, train_loss_hist, val_loss_hist = main()
+# model, train_loss_hist, val_loss_hist = main()
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# In[]
 
 
 
