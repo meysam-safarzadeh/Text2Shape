@@ -30,16 +30,27 @@ def preprocess_textlist(text_list):
     
     for c, text in enumerate(text_list):
         # lowercase the text
-        text = text.lower()
+        if isinstance(text, str):
+            text = text.lower()
+        else:
+            # Handle the case when `text` is not a string (e.g., a float)
+            # Convert `text` to a string or take appropriate action
+            text = str(text).lower()
+        # print("----", text)
         
         # check for spelling errors and get suggestions
         matches = tool.check(text)
-        corrections = [match.replacements[0] for match in matches]
+        # print('++++', matches)
+        # print(matches)
+        # breakpoint()
+        corrections = [match.replacements[0] for match in matches if match.replacements]
         
+        # print(len(matches))
         # replace misspelled words with suggested corrections
-        for i, match in enumerate(matches):
+        for match, correction in zip(matches, corrections):
             start, end = match.offset, match.offset + match.errorLength
-            text = text[:start] + corrections[i] + text[end:]
+            text = text[:start] + correction + text[end:]
+
         
         # tokenize and lemmatize the text using Spacy
         doc = nlp(text)
@@ -52,19 +63,19 @@ def preprocess_textlist(text_list):
 
 
 
-# text_list = ["The quick brown fox jumped over the lazy dog.", "hello, a good chair!"]
+# text_list = ["The quick brown fox jumped over the lazy dog.", "hello, a good chair!","The quick brown fox jumped over the lazy dog."]
 # preprocessed_text_list = preprocess_textlist(text_list)
 
 
 import torch
 from transformers import BertModel, BertTokenizer
 
+
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+model = BertModel.from_pretrained('bert-base-uncased')
+
 def embed_textlist(text_list):
     # Load pre-trained BERT model and tokenizer
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    model = BertModel.from_pretrained('bert-base-uncased')
-    
-    
     # Tokenize input texts
     tokenized_texts = [tokenizer.encode(text, add_special_tokens=True, max_length=64) for text in text_list]
     
@@ -79,7 +90,7 @@ def embed_textlist(text_list):
     with torch.no_grad():
         embeddings = model(input_ids)[0][:, :256]
     
-    print(embeddings.shape)  # Output: torch.Size([2, 64, 768])
+    # print(embeddings.shape)  # Output: torch.Size([2, 64, 768])
     return embeddings
 
 def read_gt(nrrd_files_list):

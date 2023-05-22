@@ -72,16 +72,16 @@ class Text2ShapeGenerator(nn.Module):
 
 
 
-# Create an instance of the network
-net = Text2ShapeGenerator()
+# # Create an instance of the network
+# net = Text2ShapeGenerator()
 
-# Define a random input tensor with the appropriate shape
-input_shape = (2, 128)
-text_encoding_with_noise = torch.rand(input_shape)
+# # Define a random input tensor with the appropriate shape
+# input_shape = (2, 128)
+# text_encoding_with_noise = torch.rand(input_shape)
 
-# Pass the input tensor through the network
-output_dict = net(text_encoding_with_noise)
+# # Pass the input tensor through the network
+# output_dict = net(text_encoding_with_noise)
 
-# Print the shape of the output tensor
-print('Sigmoid output shape:', output_dict['sigmoid_output'].shape)
-print('Logits shape:', output_dict['logits'].shape)
+# # Print the shape of the output tensor
+# print('Sigmoid output shape:', output_dict['sigmoid_output'].shape)
+# print('Logits shape:', output_dict['logits'].shape)

@@ -30,23 +30,25 @@ class Text_Encoder(nn.Module):
 
 
     def forward(self, x):
-        print(x.shape)
-        x = self.conv_layers(x)
-        print(x.shape)
+        # print(x.shape)
+        x = x.squeeze()
+        
+        x = self.conv_layers(x.transpose(1, 2))
+        # print(x.shape)
         x, _ = self.gru(x.transpose(1, 2))
-        print(x.shape)
+        # print(x.shape)
         x = self.pooling_layer(x.transpose(1, 2)).squeeze()
-        print(x.shape, 'here')
+        # print(x.shape, 'here')
         x = self.fc(x)
-        print(x.shape)
+        # print(x.shape)
         
         regularizer_loss = 0
         for param in self.parameters():
             regularizer_loss += torch.sum(param.pow(2))
         return x + 0.0005 * regularizer_loss
 
-# To use the model
-model = Text_Encoder()
-input_tensor = torch.randn(32, 64, 768) # assuming a batch size of 32 and input size of (64, 768)
-output_tensor = model(input_tensor.transpose(1, 2)) # Transpose the tensor to be in the (batch_size, input_channels, input_length) format expected by the convolution layers
+# # To use the model
+# model = Text_Encoder()
+# input_tensor = torch.randn(32, 1, 64, 768) # assuming a batch size of 32 and input size of (64, 768)
+# output_tensor = model(input_tensor) # Transpose the tensor to be in the (batch_size, input_channels, input_length) format expected by the convolution layers
 

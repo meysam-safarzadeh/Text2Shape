@@ -22,13 +22,15 @@ class CustomDataset(Dataset):
 
     def __getitem__(self, index):
         # Load the input data
-        input_data = self.data.iloc[index, 2].tolist()
+        # print(self.data.iloc[index, 2])
+        input_data = [self.data.iloc[index, 2]]
         input_data = preprocess_textlist(input_data)
         input_data = embed_textlist(input_data)
         input_data = torch.tensor(input_data).to(self.device) # shape: (batch size, 128)
 
         # Load the ground truth data from file
-        gt_file = self.data.iloc[index, 6].tolist()
+        gt_file = [self.data.iloc[index, 6]]
         gt_data = read_gt(gt_file).to(self.device) # shape: (batch size, 4, 32, 32, 32)
+        gt_data = gt_data.squeeze()/255.0
 
         return input_data, gt_data
