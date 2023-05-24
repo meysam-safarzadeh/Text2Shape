@@ -26,7 +26,7 @@ class CustomDataset(Dataset):
         input_data = [self.data.iloc[index, 2]]
         input_data = preprocess_textlist(input_data)
         input_data = embed_textlist(input_data)
-        input_data = torch.tensor(input_data).to(self.device) # shape: (batch size, 128)
+        input_data = torch.tensor(input_data).to(self.device) # shape: (batch size, 1, 64, 768)
 
         # Load the ground truth data from file
         gt_file = [self.data.iloc[index, 6]]

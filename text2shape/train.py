@@ -17,6 +17,7 @@ import torch.nn as nn
 import torch.optim as optim
 import shutil
 import numpy as np
+from custom_test import custom_test, visualize_voxelization
 
 def save_checkpoint(state, is_best, checkpoint_folder='checkpoints/', filename='checkpoint.pth.tar'):
     checkpoint_file = os.path.join(checkpoint_folder, 'checkpoint_{}.pth.tar'.format(state['epoch']))
@@ -167,33 +168,5 @@ def main():
     # test_loss = test(model, test_loader, criterion, device)
     # print(f'Test loss: {test_loss:.4f}')
     return model, train_loss_hist, val_loss_hist
-
-
-# model, train_loss_hist, val_loss_hist = main()
-
-
-
-
-
-
-# In[]
-
-
-
-
-
-
-
-
-# # Create a data loader for the dataset
-# dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-
-# index = [2, 10, 5, 6, 7 , 9, 10]
-# inputs, targets = dataset.__getitem__(index)
-
-# # Create an instance of the combined model
-# model = SimpleText2Shape()
-# output_shape = model(inputs.transpose(1, 2))
-
 
 
