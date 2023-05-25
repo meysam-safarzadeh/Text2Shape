@@ -17,7 +17,20 @@ import torch.nn as nn
 import torch.optim as optim
 import shutil
 import numpy as np
-from custom_test import custom_test, visualize_voxelization
+import matplotlib.pyplot as plt
+
+def plot_loss(train_loss, val_loss, save_path):
+    # Plotting the training and validation loss
+    plt.plot(train_loss, label='Train Loss')
+    plt.plot(val_loss, label='Validation Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Training and Validation Loss')  
+    plt.legend()
+
+    # Saving the plot to the specified directory
+    plt.savefig(save_path)
+    plt.close()
 
 def save_checkpoint(state, is_best, checkpoint_folder='checkpoints/', filename='checkpoint.pth.tar'):
     checkpoint_file = os.path.join(checkpoint_folder, 'checkpoint_{}.pth.tar'.format(state['epoch']))
@@ -75,33 +88,37 @@ def val(val_loader, model, criterion, optimizer, device, verbose, epoch, numEpoc
     
     return val_loss
 
-def test(model, test_loader, device):
+def test(test_loader, model, criterion, optimizer, device, verbose):
     model.eval()
-    correct = 0
-    total = 0
-    
-    with torch.no_grad():
-        for inputs, targets in test_loader:
-            inputs = inputs.to(device)
-            targets = targets.to(device)
+    test_loss = 0.0
+    torch.cuda.empty_cache()
+    for i, (inputs, targets) in enumerate(test_loader):
+        optimizer.zero_grad()
+        
+        inputs = inputs.to(device)
+        targets = targets.to(torch.float)
+        outputs = model(inputs)
+        # breakpoint()
+        
+        loss = criterion(outputs['sigmoid_output'].to(torch.float), targets)
+        
+        test_loss += loss.item() * inputs.size(0)
+        
+        if verbose:
+            print('Test loss: %.4f' %(test_loss/(i+1)))
             
-            outputs = model(inputs)
-            
-            _, predicted = torch.max(outputs.data, 1)
-            
-            total += targets.size(0)
-            correct += (predicted == targets).sum().item()
     
-    accuracy = correct / total
+    test_loss /= len(test_loader.dataset)
+    print('Test loss: %.4f' %(test_loss))
     
-    return accuracy
+    return test_loss
 
 def main():
     # Set device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
     # Set the path to the CSV file
-    csv_file = '/home/dulab/Courses/intelligentVisualComputing/Final_project/final_project_CS674/text2shape/data/captions.tablechair.csv'
+    csv_file = 'data/captions.tablechair.csv'
     
     # Create a dataset from the CSV file
     dataset = CustomDataset(csv_file)
@@ -157,16 +174,20 @@ def main():
         if is_best:
             best_loss = val_loss
             best_epoch = epoch
-        save_checkpoint({"epoch": epoch + 1, "state_dict": model.state_dict(), "best_loss": best_loss, "optimizer": optimizer.state_dict()},
+            save_checkpoint({"epoch": epoch + 1, "state_dict": model.state_dict(), "best_loss": best_loss, "optimizer": optimizer.state_dict()},
                         is_best, checkpoint_folder="/home/dulab/Courses/intelligentVisualComputing/Final_project/checkpoints/")
         
         train_loss_hist.append(train_loss)
         val_loss_hist.append(val_loss)
-
     
-    # Evaluate on the test set
-    # test_loss = test(model, test_loader, criterion, device)
-    # print(f'Test loss: {test_loss:.4f}')
-    return model, train_loss_hist, val_loss_hist
+    
+    plot_loss(train_loss_hist, val_loss_hist, 'results/loss_plot.png')
+    
+    # Test the model
+    print('[INFO] Test in progress...')
+    test_loss = test(test_loader, model, criterion, optimizer, device, verbose=False)
+    
+    return model, train_loss_hist, val_loss_hist, test_loss
 
-
+if __name__ == "__main__":
+    model, train_loss, val_loss, test_loss = main()

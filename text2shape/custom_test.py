@@ -97,5 +97,5 @@ text_list = ['big table desk',
              'simple sofa with 4 legs',
              'simple sofa with 5 leg']
 output_voxels = custom_test(model, text_list)
-visualize_voxelization(output_voxels, text_list, 9)
+visualize_voxelization(output_voxels, text_list, threshold=9)
 
