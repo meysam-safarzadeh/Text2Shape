@@ -13,7 +13,19 @@ matplotlib==3.7.0
 Please ensure that these dependencies are installed before running the code. The code has been implemented and tested using Python 3.9.16 with conda environment management.
 
 Code Attribution
-All codes in this project is primarily written by Meysam Safarzadeh.
+Meysam Safarzadeh:
+train.py
+model.py
+custom_test.py
+Tested and debugged the final code
+
+Shaurya Rawat:
+Text description preprocessing
+encoder.py
+
+Nelson Evbarunegbe:
+3D shape preprocessing
+generator.py
 
 
 ## Instructions
