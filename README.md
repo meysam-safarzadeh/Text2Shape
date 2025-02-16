@@ -63,7 +63,7 @@ Please refer to the code comments and documentation for more details on how to u
 
 ## Implementation
 
-The implementation of our research paper involves three interconnected modules that operate under full supervision. As shown in Figure 1, modules encompass text preprocessing, BERT-based text encoding, a convolutional neural network (CNN) based text encoder architecture, and a shape generation architecture. The model leverages Mean Squared Error (MSE) loss and the Adam optimizer for training.
+The implementation of this method involves three interconnected modules that operate under full supervision. As shown in Figure 1, modules include text preprocessing, BERT-based text encoding, a convolutional neural network (CNN) based text encoder architecture, and a shape generation architecture. The model leverages Mean Squared Error (MSE) loss and the Adam optimizer for training.
 
 ![image](https://github.com/meysam-safarzadeh/Text2Shape/assets/51737180/84c7abb2-0aa7-4475-87e0-447bee94daa1 "Summary of the model")
 
@@ -92,7 +92,7 @@ The implementation of our research paper involves three interconnected modules t
 
 ### 3 Text Encoder Architecture
 #### 3.1 CNN Architecture
-- **Inspiration:** Modeled after the approach in the Text2Shape paper.
+- 
 
 #### 3.2 Encoding Process
 - **Function:** Encoding each embedded text into a 128-dimensional condensed representation.
